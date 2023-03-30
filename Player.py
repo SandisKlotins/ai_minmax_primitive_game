@@ -10,13 +10,13 @@ class Player:
 
     def castFireBolt(self, opponents_shield: int) -> dict:
         if opponents_shield > 0:
-            return {'health': 5, 'shield': 5}
+            return {'health': 5, 'shields': 5}
 
         else:
-            return {'health': 10, 'shield': 0}
+            return {'health': 10, 'shields': 0}
 
     def castFrostBolt(self) -> dict:
-        return {'health': 0, 'shield': 10}
+        return {'health': 0, 'shields': 10}
 
     def input(self) -> str:
         spell_choice: str = input("Which spell to cast? [fire/frost]").lower()
@@ -52,11 +52,11 @@ class Player:
     def getAiDmg(self) -> int:
         return self.__ai_dmg
 
-    def setAiDmg(self, ai_dmg):
+    def setAiDmg(self, ai_dmg) -> None:
         self.__ai_dmg = ai_dmg
 
-    def setShields(self, shields):
+    def setShields(self, shields) -> None:
         self.__shields = shields
 
-    def setHealth(self, health):
+    def setHealth(self, health) -> None:
         self.__health = health

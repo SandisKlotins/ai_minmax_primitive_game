@@ -10,10 +10,10 @@ class Game:
         self.player_one_goes_first = bool(getrandbits(1))
         self.player_one_turn: bool = False
 
-    def incrementTurn(self):
+    def incrementTurn(self) -> None:
         self.turn = self.turn + 1
 
-    def processFirstTurn(self):
+    def processFirstTurn(self) -> None:
         if self.player_one_goes_first:
             print('Player one goes first')
             if self.player_one.isAi():
@@ -26,9 +26,9 @@ class Game:
                 dmg: dict = self.player_one.spellChoice(
                     spell_choice, self.player_two.getShields())
                 self.player_two.setHealth(
-                    self.player_two.getHealth() - dmg['health'])
+                    self.player_two.getHealth() - dmg['healths'])
                 self.player_two.setShields(
-                    self.player_two.getShields() - dmg['shield'])
+                    self.player_two.getShields() - dmg['shields'])
 
             self.player_one_turn = False
 
@@ -46,7 +46,7 @@ class Game:
                 self.player_one.setHealth(
                     self.player_one.getHealth() - dmg['health'])
                 self.player_one.setShields(
-                    self.player_one.getShields() - dmg['shield'])
+                    self.player_one.getShields() - dmg['shields'])
 
             self.player_one_turn = True
 
@@ -55,7 +55,7 @@ class Game:
         print(f'Player one health = {self.player_one.getHealth()}, shields = {self.player_one.getShields()}\nPlayer two health = {self.player_two.getHealth()}, shields = {self.player_two.getShields()}\nTurn {self.turn} concluded')
         print('____________________________________')
 
-    def processTurn(self):
+    def processTurn(self) -> None:
         if self.player_one_turn:
             print('Player one turn')
             self.player_two.setHealth(

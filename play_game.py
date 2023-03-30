@@ -1,6 +1,5 @@
 from Player import Player
 from Game import Game
-from min_max_tree import generateTurnTree
 from random import getrandbits
 
 
@@ -12,11 +11,6 @@ game = Game(player_one, player_two)
 player_one_goes_first = bool(getrandbits(1))
 player_one_turn: bool = False
 
-# game_tree = generateTurnTree(
-#     minimizer=player_one,
-#     maximizer=player_two,
-#     minimizer_goes_first=player_one_goes_first
-# )
 
 print(
     f'Initializing game\nPlayer one health = {player_one.getHealth()}, shields = {player_one.getShields()}\nPlayer two health = {player_two.getHealth()}, shields = {player_two.getShields()}')
