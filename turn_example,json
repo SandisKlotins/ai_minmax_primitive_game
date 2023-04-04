@@ -1,0 +1,132 @@
+[
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": -5,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "fire",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": 0,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "frost",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": -5,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "fire",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": 0,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "frost",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": -5,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "fire",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": 0,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "frost",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": -5,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "fire",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": 0,
+            "shields": -5
+        },
+        "player": "p1",
+        "spell": "frost",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": -5,
+            "shields": 0
+        },
+        "player": "p1",
+        "spell": "fire",
+        "rating": 0
+    },
+    {
+        "p1": {
+            "health": 5,
+            "shields": -5
+        },
+        "p2": {
+            "health": 0,
+            "shields": 0
+        },
+        "player": "p1",
+        "spell": "frost",
+        "rating": 0
+    }
+]
