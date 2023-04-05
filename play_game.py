@@ -23,9 +23,6 @@ p2_is_ai: bool = False if human_player == 'p2' else True
 player_one = Player(ai=p1_is_ai)
 player_two = Player(ai=p2_is_ai)
 
-# Initialize the game
-game = Game(player_one, player_two)
-
 player_one_goes_first = bool(getrandbits(1))
 player_one_turn: bool = False
 
@@ -36,7 +33,13 @@ turn_tree = TurnTree(player_one=player_one,
 
 # Store every turn outcome
 turn_tree.generateTree()
+turn_tree.evaluateTree()
 turns: dict = turn_tree.getTree()
+
+# Initialize the game
+game = Game(player_one=player_one,
+            player_two=player_two,
+            turns=turns)
 
 print(
     f'Initializing game\nPlayer one health = {player_one.getHealth()}, shields = {player_one.getShields()}\nPlayer two health = {player_two.getHealth()}, shields = {player_two.getShields()}')

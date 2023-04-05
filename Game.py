@@ -3,19 +3,46 @@ from Player import Player
 
 
 class Game:
-    def __init__(self, player_one: Player, player_two: Player):
+    def __init__(self, player_one: Player, player_two: Player, turns: dict):
         self.player_one = player_one
         self.player_two = player_two
-        self.turn: int = 1
+        self.turn: int = 0
         self.player_one_goes_first = bool(getrandbits(1))
         self.player_one_turn: bool = False
+        self.turns = turns
+
+    def aiBestOption(self) -> str:
+        options: list[dict] = self.turns[self.turn + 1]
+        print(options)
+        # Pick the highest rating turn option
+        max_rating: int = -1
+        # In case there are no better options pick the first option in the list
+        best_option: dict = self.turns[self.turn + 1][0]
+
+        for option in range(len(options)):
+            if max_rating < options[option]['rating']:
+                print('yay')
+                max_rating = options[option]['rating']
+                best_option = options[option]
+
+                print(options[option])
+
+        return best_option['spell']
+
 
     def processFirstTurn(self) -> None:
         if self.player_one_goes_first:
             print('Player one goes first')
             if self.player_one.isAi():
+                spell_choice: str = self.aiBestOption()
+
+                print(f'Player two attacks with {spell_choice}')
+                dmg: dict = self.player_one.spellChoice(
+                    spell_choice, self.player_two.getShields())
                 self.player_two.setHealth(
-                    self.player_two.getHealth() - self.player_one.getAiDmg())
+                    self.player_two.getHealth() - dmg['health'])
+                self.player_two.setShields(
+                    self.player_two.getShields() - dmg['shields'])
 
             else:
                 spell_choice: str = self.player_one.input()
@@ -32,8 +59,15 @@ class Game:
         else:
             print('Player two goes first')
             if self.player_two.isAi():
+                spell_choice: str = self.aiBestOption()
+
+                print(f'Player two attacks with {spell_choice}')
+                dmg: dict = self.player_two.spellChoice(
+                    spell_choice, self.player_one.getShields())
                 self.player_one.setHealth(
-                    self.player_one.getHealth() - self.player_two.getAiDmg())
+                    self.player_one.getHealth() - dmg['health'])
+                self.player_one.setShields(
+                    self.player_one.getShields() - dmg['shields'])
 
             else:
                 spell_choice: str = self.player_two.input()
@@ -56,10 +90,15 @@ class Game:
         if self.player_one_turn:
             print('Player one turn')
             if self.player_one.isAi():
-                self.player_two.setHealth(
-                    self.player_two.getHealth() - self.player_one.getAiDmg())
+                spell_choice: str = self.aiBestOption()
 
-                self.player_one_turn = False
+                print(f'Player two attacks with {spell_choice}')
+                dmg: dict = self.player_one.spellChoice(
+                    spell_choice, self.player_two.getShields())
+                self.player_two.setHealth(
+                    self.player_two.getHealth() - dmg['health'])
+                self.player_two.setShields(
+                    self.player_two.getShields() - dmg['shields'])
 
             else:
                 spell_choice: str = self.player_one.input()
@@ -71,13 +110,21 @@ class Game:
                 self.player_two.setShields(
                     self.player_two.getShields() - dmg['shields'])
 
-                self.player_one_turn = False
+            self.player_one_turn = False
 
         else:
             print('Player two turn')
             if self.player_two.isAi():
+
+                spell_choice: str = self.aiBestOption()
+                print(f'Player two attacks with {spell_choice}')
+                dmg: dict = self.player_two.spellChoice(
+                    spell_choice, self.player_one.getShields())
                 self.player_one.setHealth(
-                    self.player_one.getHealth() - self.player_two.getAiDmg())
+                    self.player_one.getHealth() - dmg['health'])
+                self.player_one.setShields(
+                    self.player_one.getShields() - dmg['shields'])
+
 
             else:
                 spell_choice: str = self.player_two.input()

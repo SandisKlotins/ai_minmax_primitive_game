@@ -10,13 +10,15 @@ class TurnTree:
                  player_one: Player,
                  player_two: Player,
                  player_one_goes_first: bool):
-        self.player_one = player_one
-        self.player_two = player_two
+        self.player_one: Player = player_one
+        self.player_two: Player = player_two
         self.turn: int = 0
-        self.player_one_goes_first = player_one_goes_first
+        self.player_one_goes_first: bool = player_one_goes_first
         self.state: dict = {}
-        self.ai_player = 'p1' if self.player_one.isAi() else 'p2'
-        self.ai_opponent = 'p2' if self.player_one.isAi() else 'p1'
+        self.ai_player: str = 'p1' if self.player_one.isAi() else 'p2'
+        self.ai_opponent: str = 'p2' if self.player_one.isAi() else 'p1'
+        self.node_id: int = 0
+        self.__is_evaluated: bool = False
 
 
     def __generateRootNode(self) -> None:
@@ -29,13 +31,19 @@ class TurnTree:
         players_turn = 'p1' if self.player_one_goes_first else 'p2'
 
         self.state[self.turn] = [{
+            'id': self.node_id,
+            'previous_id': 0,
             'p1': {'health': self.player_one.getHealth(), 'shields': self.player_one.getShields()},
             'p2': {'health': self.player_two.getHealth(), 'shields': self.player_two.getShields()},
             'player': players_turn,
             'spell': '',
             'rating': 0}]
 
+        self.node_id = self.node_id + 1
+        print(
+            f'Turn {self.turn} number of nodes: {len(self.state)}')
         self.turn = self.turn + 1
+        
 
 
     # Updates state with all possible outcomes based on previous turn
@@ -46,10 +54,10 @@ class TurnTree:
         # print(f'Generating all possible turns for turn {self.turn}')
 
         # Store all outcomes of current turn
-        turn_nodes = []
+        turn_nodes: list = []
 
         # Set used to check for duplicate nodes
-        seen = set()
+        seen: set = set()
 
         # Iterate over all the outcomes from the previous turn.
         # For each outcome generate 2 possible outcomes -
@@ -81,12 +89,15 @@ class TurnTree:
             # Avoid duplicate nodes (same health/shields combinations for opponent and player)
             if (not player_health <= 0 and not node[opponent]['health'] <= 0) and node_vals not in seen:
                 turn_nodes.append({
+                    'id': self.node_id,
+                    'previous_id': node['id'],
                     players_turn: {'health': player_health, 'shields': player_shields},
                     opponent: {'health': opponent_health, 'shields': opponent_shields},
                     'player': players_turn,
                     'spell': 'fire',
-                    'rating': 0})
+                    'rating': None})
                 
+                self.node_id = self.node_id + 1
                 seen.add(node_vals)
 
             # Process frost attack
@@ -99,12 +110,15 @@ class TurnTree:
 
             if (not player_health <= 0 and not node[opponent]['health'] <= 0) and node_vals not in seen:
                 turn_nodes.append({
+                    'id': self.node_id,
+                    'previous_id': node['id'],
                     players_turn: {'health': player_health, 'shields': player_shields},
                     opponent: {'health': opponent_health, 'shields': opponent_shields},
                     'player': players_turn,
                     'spell': 'frost',
-                    'rating': 0})
+                    'rating': None})
                 
+                self.node_id = self.node_id + 1
                 seen.add(node_vals)
 
         print(
@@ -130,39 +144,41 @@ class TurnTree:
     def getTree(self) -> dict:
         num_turns: int = len(self.state)
 
-        if num_turns > 0:
+        if num_turns > 0 and self.__is_evaluated:
             return self.state
 
-        exit(f'No turns have yet been generated, cannot return sate | turns = {num_turns}')
+        exit(f'No turns have yet been generated OR evaluated, cannot return sate | turns = {num_turns}')
 
-
-    def __evaluateLastTurn(self):
-        print(f'{self.ai_player} is ai player')
-
-        for i in range(len(self.state[self.turn])):
-            # If opponent is dead, rating is positive else negative
-            rating = 1 if self.state[self.turn][i][self.ai_opponent]['health'] <= 0 else -1
-            self.state[self.turn][i]['rating'] = rating
-            
-    # <toDo> figure out how to link nodes between turns
+    # <toDo> rating needs to be minmax dependant, rn just plain previous turns rating is used
     def evaluateTree(self):
         if len(self.state) == 0:
             exit('Game tree has not been generated yet.')
 
-        # Assigns rating to all last turn nodes
-        self.__evaluateLastTurn()
+        while self.turn != 0:
+            # Prep
+            next_turn_outcomes: list[tuple] = []
+            next_turn_ids: list[int] = []
+
+            # Esure list index is not out of range
+            if not self.turn == len(self.state) - 1:
+                next_turn_outcomes: dict = {node['previous_id']: node['rating'] for node in self.state[self.turn + 1]}
+                next_turn_ids: list[int] = [node['previous_id'] for node in self.state[self.turn + 1]]
+
+            for node in range(len(self.state[self.turn])):
+                # Check if this is the last turn
+                if self.state[self.turn][node]['id'] not in next_turn_ids:
+
+                    # If node id is not present in next turn then it's a dead end node, assign new rating.
+                    rating: int = 1 if self.state[self.turn][node][self.ai_opponent]['health'] <= 0 else -1
+                    self.state[self.turn][node]['rating'] = rating
+                
+                else:
+                    # Use next turns rating
+                    rating: int = next_turn_outcomes[self.state[self.turn][node]['id']]
+                    self.state[self.turn][node]['rating'] = rating
+
+            self.turn = self.turn - 1
+        self.__is_evaluated = True
 
 
-player_one = Player(ai=True)
-player_two = Player(ai=False)
 
-player_one_goes_first = bool(getrandbits(1))
-player_one_turn: bool = False
-
-# Initialize and generate every possible turn with the above settings
-turn_tree = TurnTree(player_one=player_one,
-              player_two=player_two,
-              player_one_goes_first=player_one_goes_first)
-
-turn_tree.generateTree()
-turn_tree.evaluateTree()

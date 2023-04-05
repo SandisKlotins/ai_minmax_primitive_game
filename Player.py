@@ -4,9 +4,10 @@ from random import randint
 class Player:
     def __init__(self, ai: bool):
         self.__ai = ai
-        self.__health: int = randint(20, 40)
+        self.__health: int = randint(40, 60)
         self.__shields: int = 80 - self.__health
         self.__ai_dmg: int = 5
+
 
     def castFireBolt(self, opponents_shield: int) -> dict:
         if opponents_shield > 0:
@@ -15,12 +16,14 @@ class Player:
         else:
             return {'health': 10, 'shields': 0}
 
+
     def castFrostBolt(self, opponents_shield: int) -> dict:
         if opponents_shield > 0:
             return {'health': 0, 'shields': 10}
 
         else:
             return {'health': 5, 'shields': 0}
+
 
     def input(self) -> str:
         spell_choice: str = input("Which spell to cast? [fire/frost]").lower()
@@ -44,6 +47,7 @@ class Player:
 
         elif spell_choice == 'frost':
             return self.castFrostBolt(opponents_shield)
+
 
     def isAi(self) -> bool:
         return self.__ai
