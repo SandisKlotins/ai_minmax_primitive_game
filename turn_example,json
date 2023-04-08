@@ -1,212 +1,104 @@
 [
     {
-        "id": 472,
-        "previous_id": 458,
+        "id": 2337,
+        "previous_id": {
+            2328
+        },
         "p1": {
-            "health": 2,
-            "shields": -7
+            "health": 1,
+            "shields": -11
         },
         "p2": {
-            "health": -9,
-            "shields": -6
+            "health": -7,
+            "shields": -13
         },
         "player": "p1",
         "spell": "fire",
         "rating": -1
     },
     {
-        "id": 473,
-        "previous_id": 458,
+        "id": 2338,
+        "previous_id": {
+            2328
+        },
         "p1": {
-            "health": 2,
-            "shields": -7
+            "health": 1,
+            "shields": -11
         },
         "p2": {
-            "health": -4,
-            "shields": -6
+            "health": -2,
+            "shields": -13
         },
         "player": "p1",
         "spell": "frost",
         "rating": -1
     },
     {
-        "id": 474,
-        "previous_id": 459,
+        "id": 2339,
+        "previous_id": {
+            2329
+        },
         "p1": {
-            "health": 2,
-            "shields": -7
+            "health": 1,
+            "shields": -11
         },
         "p2": {
-            "health": -9,
-            "shields": -1
+            "health": -7,
+            "shields": -8
         },
         "player": "p1",
         "spell": "fire",
         "rating": -1
     },
     {
-        "id": 475,
-        "previous_id": 459,
+        "id": 2340,
+        "previous_id": {
+            2329
+        },
         "p1": {
-            "health": 2,
-            "shields": -7
-        },
-        "p2": {
-            "health": -4,
-            "shields": -1
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": -1
-    },
-    {
-        "id": 476,
-        "previous_id": 460,
-        "p1": {
-            "health": 2,
-            "shields": -7
-        },
-        "p2": {
             "health": 1,
-            "shields": -6
+            "shields": -11
+        },
+        "p2": {
+            "health": -2,
+            "shields": -8
         },
         "player": "p1",
         "spell": "frost",
         "rating": -1
     },
     {
-        "id": 477,
-        "previous_id": 461,
-        "p1": {
-            "health": 2,
-            "shields": -7
+        "id": 2341,
+        "previous_id": {
+            2336
         },
-        "p2": {
+        "p1": {
             "health": 1,
-            "shields": -1
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": -1
-    },
-    {
-        "id": 478,
-        "previous_id": 466,
-        "p1": {
-            "health": 2,
-            "shields": -7
+            "shields": -11
         },
         "p2": {
-            "health": 6,
-            "shields": -6
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": 1
-    },
-    {
-        "id": 479,
-        "previous_id": 467,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": -9,
-            "shields": -6
+            "health": -7,
+            "shields": -3
         },
         "player": "p1",
         "spell": "fire",
         "rating": -1
     },
     {
-        "id": 480,
-        "previous_id": 467,
+        "id": 2342,
+        "previous_id": {
+            2336
+        },
         "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": -4,
-            "shields": -6
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": -1
-    },
-    {
-        "id": 481,
-        "previous_id": 468,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": -9,
-            "shields": -1
-        },
-        "player": "p1",
-        "spell": "fire",
-        "rating": -1
-    },
-    {
-        "id": 482,
-        "previous_id": 468,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": -4,
-            "shields": -1
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": -1
-    },
-    {
-        "id": 483,
-        "previous_id": 469,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
             "health": 1,
-            "shields": -6
+            "shields": -11
+        },
+        "p2": {
+            "health": -2,
+            "shields": -3
         },
         "player": "p1",
         "spell": "frost",
         "rating": -1
-    },
-    {
-        "id": 484,
-        "previous_id": 470,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": 1,
-            "shields": -1
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": -1
-    },
-    {
-        "id": 485,
-        "previous_id": 471,
-        "p1": {
-            "health": 2,
-            "shields": -2
-        },
-        "p2": {
-            "health": 6,
-            "shields": -6
-        },
-        "player": "p1",
-        "spell": "frost",
-        "rating": 1
     }
 ]

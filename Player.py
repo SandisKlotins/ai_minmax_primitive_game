@@ -19,7 +19,7 @@ class Player:
 
     def castFrostBolt(self, opponents_shield: int) -> dict:
         if opponents_shield > 0:
-            return {'health': 0, 'shields': 10}
+            return {'health': 0, 'shields': 15}
 
         else:
             return {'health': 5, 'shields': 0}

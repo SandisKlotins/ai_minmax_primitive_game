@@ -12,23 +12,32 @@ class Game:
         self.turns = turns
 
     def aiBestOption(self) -> str:
+
         options: list[dict] = self.turns[self.turn + 1]
-        print(options)
-        # Pick the highest rating turn option
         max_rating: int = -1
+
+        # Debug
+        print(options)
         # In case there are no better options pick the first option in the list
         best_option: dict = self.turns[self.turn + 1][0]
 
+        opponent: str = 'p2' if self.player_one.isAi() else 'p1'
+
+        # Pick the highest rated turn
         for option in range(len(options)):
             if max_rating < options[option]['rating']:
-                print('yay')
+
                 max_rating = options[option]['rating']
                 best_option = options[option]
 
-                print(options[option])
+            # Subroutine to further optimize result when multiple nodes have the same rating
+            # Some nodes can still have a smaller product despite the rating
+            elif max_rating == options[option]['rating']:
+                if options[option][opponent]['health'] + options[option][opponent]['shields'] < best_option[opponent]['health'] + best_option[opponent]['shields']:
+                    max_rating = options[option]['rating']
+                    best_option = options[option]
 
         return best_option['spell']
-
 
     def processFirstTurn(self) -> None:
         if self.player_one_goes_first:
@@ -36,7 +45,7 @@ class Game:
             if self.player_one.isAi():
                 spell_choice: str = self.aiBestOption()
 
-                print(f'Player two attacks with {spell_choice}')
+                print(f'Player one attacks with {spell_choice}')
                 dmg: dict = self.player_one.spellChoice(
                     spell_choice, self.player_two.getShields())
                 self.player_two.setHealth(
@@ -124,7 +133,6 @@ class Game:
                     self.player_one.getHealth() - dmg['health'])
                 self.player_one.setShields(
                     self.player_one.getShields() - dmg['shields'])
-
 
             else:
                 spell_choice: str = self.player_two.input()

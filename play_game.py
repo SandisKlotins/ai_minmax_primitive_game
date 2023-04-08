@@ -43,6 +43,7 @@ game = Game(player_one=player_one,
 
 print(
     f'Initializing game\nPlayer one health = {player_one.getHealth()}, shields = {player_one.getShields()}\nPlayer two health = {player_two.getHealth()}, shields = {player_two.getShields()}')
+print(f'You are playing as {human_player}')
 print('____________________________________')
 
 # Play the game

@@ -1,10 +1,7 @@
-ld = [{'id': 1, 'previous_id': 0, 'p1': {'health': 30, 'shields': 50}, 'p2': {'health': 15, 'shields': 55}, 'player': 'p1', 'spell': 'fire', 'rating': 1}, {'id': 2, 'previous_id': 0, 'p1': {'health': 30, 'shields': 50}, 'p2': {'health': 20, 'shields': 50}, 'player': 'p1', 'spell': 'frost', 'rating': -1}]
-max_rating: int = -1
-best_option: dict
+# 2-D List
+matrix = [{13}, {13, 15}, {14}, {16, 14}, {19, 15}, {16, 20}, {17}, {17, 18}, {18, 21}, {19}, {20}, {21}]
+  
+# Nested List Comprehension to flatten a given 2-D matrix
+flatten_matrix = [val for sublist in matrix for val in sublist]
 
-for i in range(len(ld)):
-    if max_rating < ld[i]['rating']:
-        max_rating = ld[i]['rating']
-        best_option = ld[i]
-
-print(best_option)
+print(flatten_matrix)
