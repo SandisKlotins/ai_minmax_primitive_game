@@ -1,151 +1,123 @@
-from random import getrandbits
 from Player import Player
 
-
 class Game:
-    def __init__(self, player_one: Player, player_two: Player, turns: dict):
-        self.player_one = player_one
-        self.player_two = player_two
-        self.turn: int = 0
-        self.player_one_goes_first = bool(getrandbits(1))
-        self.player_one_turn: bool = False
+    def __init__(self, 
+                 player: Player,
+                 human_player: str, 
+                 ai_player: str, 
+                 turns: dict, 
+                 player_one_goes_first: bool):
+        self.player = player
+        self.human_player = human_player
+        self.ai_player = ai_player
+        self.player_one_goes_first = player_one_goes_first
         self.turns = turns
-
-    def aiBestOption(self) -> str:
-
-        options: list[dict] = self.turns[self.turn + 1]
-        max_rating: int = -1
-
-        # Debug
-        print(options)
-        # In case there are no better options pick the first option in the list
-        best_option: dict = self.turns[self.turn + 1][0]
-
-        opponent: str = 'p2' if self.player_one.isAi() else 'p1'
-
-        # Pick the highest rated turn
-        for option in range(len(options)):
-            if max_rating < options[option]['rating']:
-
-                max_rating = options[option]['rating']
-                best_option = options[option]
-
-            # Subroutine to further optimize result when multiple nodes have the same rating
-            # Some nodes can still have a smaller product despite the rating
-            elif max_rating == options[option]['rating']:
-                if options[option][opponent]['health'] + options[option][opponent]['shields'] < best_option[opponent]['health'] + best_option[opponent]['shields']:
-                    max_rating = options[option]['rating']
-                    best_option = options[option]
-
-        return best_option['spell']
+        self.turn: int = 0
+        self.previous_id: int = 0
+        self.human_health: int
+        self.human_shields: int
+        self.ai_health: int
+        self.ai_shields: int
 
     def processFirstTurn(self) -> None:
-        if self.player_one_goes_first:
-            print('Player one goes first')
-            if self.player_one.isAi():
-                spell_choice: str = self.aiBestOption()
+        # Play out first turn
+        # Set game to start on 1st turn (1st choice)
+        self.turn = self.turn + 1
+        print(self.turn)
 
-                print(f'Player one attacks with {spell_choice}')
-                dmg: dict = self.player_one.spellChoice(
-                    spell_choice, self.player_two.getShields())
-                self.player_two.setHealth(
-                    self.player_two.getHealth() - dmg['health'])
-                self.player_two.setShields(
-                    self.player_two.getShields() - dmg['shields'])
+        options: list[dict] = self.turns[self.turn]
 
-            else:
-                spell_choice: str = self.player_one.input()
-                print(f'Player one attacks with {spell_choice}')
-                dmg: dict = self.player_one.spellChoice(
-                    spell_choice, self.player_two.getShields())
-                self.player_two.setHealth(
-                    self.player_two.getHealth() - dmg['health'])
-                self.player_two.setShields(
-                    self.player_two.getShields() - dmg['shields'])
+        # Process AI turn
+        if options[0]['player'] == self.ai_player:
+            # Set default option rating
+            # # If there are no good options use the first element in the list
+            max_rating: int = -1
+            best_option: dict = options[0]
 
-            self.player_one_turn = False
+            for option in options:
+                if max_rating < option['rating']:
+                    max_rating = option['rating']
+                    best_option = option
+
+                # Subroutine: in case ai values its best option and the current option the same
+                # Check if options product is better. This helps AI make overall better choices if the human player is not playing optimally
+                elif max_rating == option['rating']:
+                    option_product: int = option[self.human_player]['health'] + option[self.human_player]['shields']
+                    best_option_product: int = best_option[self.human_player]['health'] + best_option[self.human_player]['shields']
+
+                    if option_product < best_option_product:
+                        best_option = option
+
+            spell: str = best_option['spell']
+            self.human_health = best_option[self.human_player]['health']
+            self.human_shields = best_option[self.human_player]['shields']
+            self.ai_health = best_option[self.ai_player]['health']
+            self.ai_shields = best_option[self.ai_player]['shields']
+            self.previous_id = best_option['id']
 
         else:
-            print('Player two goes first')
-            if self.player_two.isAi():
-                spell_choice: str = self.aiBestOption()
+            # Process human turn
+            spell: str = self.player.input()
+            option: dict = [node for node in self.turns[self.turn] if node['spell'] == spell][0]
+            self.human_health = option[self.human_player]['health']
+            self.human_shields = option[self.human_player]['shields']
+            self.ai_health = option[self.ai_player]['health']
+            self.ai_shields = option[self.ai_player]['shields']
+            self.previous_id = option['id']
 
-                print(f'Player two attacks with {spell_choice}')
-                dmg: dict = self.player_two.spellChoice(
-                    spell_choice, self.player_one.getShields())
-                self.player_one.setHealth(
-                    self.player_one.getHealth() - dmg['health'])
-                self.player_one.setShields(
-                    self.player_one.getShields() - dmg['shields'])
-
-            else:
-                spell_choice: str = self.player_two.input()
-                print(f'Player one attacks with {spell_choice}')
-                dmg: dict = self.player_two.spellChoice(
-                    spell_choice, self.player_two.getShields())
-                self.player_one.setHealth(
-                    self.player_one.getHealth() - dmg['health'])
-                self.player_one.setShields(
-                    self.player_one.getShields() - dmg['shields'])
-
-            self.player_one_turn = True
+        print('____________________________________')
+        print(f'Human health = {self.human_health}, shields = {self.human_shields}\nAI health = {self.ai_health}, shields = {self.ai_shields}\nTurn {self.turn} concluded')
+        print('____________________________________')
 
         self.turn = self.turn + 1
-        print('____________________________________')
-        print(f'Player one health = {self.player_one.getHealth()}, shields = {self.player_one.getShields()}\nPlayer two health = {self.player_two.getHealth()}, shields = {self.player_two.getShields()}\nTurn {self.turn} concluded')
-        print('____________________________________')
+        print(self.turn)
 
     def processTurn(self) -> None:
-        if self.player_one_turn:
-            print('Player one turn')
-            if self.player_one.isAi():
-                spell_choice: str = self.aiBestOption()
+        # Play out regular turn
+        print(self.previous_id)
+        print(self.turns[self.turn])
 
-                print(f'Player two attacks with {spell_choice}')
-                dmg: dict = self.player_one.spellChoice(
-                    spell_choice, self.player_two.getShields())
-                self.player_two.setHealth(
-                    self.player_two.getHealth() - dmg['health'])
-                self.player_two.setShields(
-                    self.player_two.getShields() - dmg['shields'])
+        options: list[dict] = [option for option in self.turns[self.turn] if self.previous_id in option['previous_id']]
 
-            else:
-                spell_choice: str = self.player_one.input()
-                print(f'Player one attacks with {spell_choice}')
-                dmg: dict = self.player_one.spellChoice(
-                    spell_choice, self.player_two.getShields())
-                self.player_two.setHealth(
-                    self.player_two.getHealth() - dmg['health'])
-                self.player_two.setShields(
-                    self.player_two.getShields() - dmg['shields'])
+        # Process AI turn
+        if options[0]['player'] == self.ai_player:
+            # Set default as bad option
+            max_rating: int = -1
+            # If there are no good options use the first element in the list
+            best_option: dict = options[0]
 
-            self.player_one_turn = False
+            for option in options:
+                if max_rating < option['rating']:
+                    max_rating = option['rating']
+                    best_option = option
+
+                # Subroutine: in case ai values its best option and the current option the same.
+                # Check if options product is better. This helps AI make overall better choices if the human player is not playing optimally
+                elif max_rating == option['rating']:
+                    option_product: int = option[self.human_player]['health'] + option[self.human_player]['shields']
+                    best_option_product: int = best_option[self.human_player]['health'] + best_option[self.human_player]['shields']
+
+                    if option_product < best_option_product:
+                        best_option = option
+
+            spell: str = best_option['spell']
+            self.human_health = best_option[self.human_player]['health']
+            self.human_shields = best_option[self.human_player]['shields']
+            self.ai_health = best_option[self.ai_player]['health']
+            self.ai_shields = best_option[self.ai_player]['shields']
+            self.previous_id = best_option['id']
 
         else:
-            print('Player two turn')
-            if self.player_two.isAi():
+            # Process human turn
+            spell: str = self.player.input()
+            option: dict = [node for node in self.turns[self.turn] if node['spell'] == spell][0]
+            self.human_health = option[self.human_player]['health']
+            self.human_shields = option[self.human_player]['shields']
+            self.ai_health = option[self.ai_player]['health']
+            self.ai_shields = option[self.ai_player]['shields']
+            self.previous_id = option['id']
 
-                spell_choice: str = self.aiBestOption()
-                print(f'Player two attacks with {spell_choice}')
-                dmg: dict = self.player_two.spellChoice(
-                    spell_choice, self.player_one.getShields())
-                self.player_one.setHealth(
-                    self.player_one.getHealth() - dmg['health'])
-                self.player_one.setShields(
-                    self.player_one.getShields() - dmg['shields'])
-
-            else:
-                spell_choice: str = self.player_two.input()
-                print(f'Player two attacks with {spell_choice}')
-                dmg: dict = self.player_two.spellChoice(
-                    spell_choice, self.player_one.getShields())
-                self.player_one.setHealth(
-                    self.player_one.getHealth() - dmg['health'])
-                self.player_one.setShields(
-                    self.player_one.getShields() - dmg['shields'])
-
-            self.player_one_turn = True
+        print(f'Human health = {self.human_health}, shields = {self.human_shields}\nAI health = {self.ai_health}, shields = {self.ai_shields}\nTurn {self.turn} concluded')
+        print('____________________________________')
 
         self.turn = self.turn + 1
-        print(f'Player one health = {self.player_one.getHealth()}, shields = {self.player_one.getShields()}\nPlayer two health = {self.player_two.getHealth()}, shields = {self.player_two.getShields()}\nTurn {self.turn} concluded')
-        print('____________________________________')

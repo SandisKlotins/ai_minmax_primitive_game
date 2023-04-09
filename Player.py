@@ -6,7 +6,6 @@ class Player:
         self.__ai = ai
         self.__health: int = randint(40, 60)
         self.__shields: int = 80 - self.__health
-        self.__ai_dmg: int = 5
 
 
     def castFireBolt(self, opponents_shield: int) -> dict:
@@ -73,12 +72,6 @@ class Player:
 
     def getHealth(self) -> int:
         return self.__health
-
-    def getAiDmg(self) -> int:
-        return self.__ai_dmg
-
-    def setAiDmg(self, ai_dmg) -> None:
-        self.__ai_dmg = ai_dmg
 
     def setShields(self, shields) -> None:
         self.__shields = shields
