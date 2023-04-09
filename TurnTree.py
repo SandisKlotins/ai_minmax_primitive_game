@@ -27,7 +27,9 @@ class TurnTree:
                 f'Cannot create root node. Turn must be 0 | turn = {self.turn}')
 
         print('Adding root node...')
-        players_turn = 'p1' if self.player_one_goes_first else 'p2'
+        # Root node is not actually a turn so we set it to player who does not make the turn
+        # Meaning on turn 1 the real turn 1 player will do the turn
+        players_turn = 'p2' if self.player_one_goes_first else 'p1'
 
         self.state[self.turn] = [{
             'id': self.node_id,
@@ -48,8 +50,6 @@ class TurnTree:
     def __generateNextTurn(self) -> None:
         if len(self.state) == 0:
             self.__generateRootNode()
-
-        # print(f'Generating all possible turns for turn {self.turn}')
 
         # Store all outcomes of current turn
         turn_nodes: list = []
@@ -176,7 +176,7 @@ class TurnTree:
                 next_turn_ids: set[int] = {previous_id for id_set in self.state[self.turn + 1] for previous_id in id_set['previous_id']}
 
             for node in range(len(self.state[self.turn])):
-                # Check if has more turns after it
+                # Check if node spawn more turns
                 if self.state[self.turn][node]['id'] not in next_turn_ids:
 
                     # If node id is not present in next turn then it's a dead end node, assign new rating.
@@ -192,16 +192,16 @@ class TurnTree:
         self.__is_evaluated = True
 
 
-player_one = Player(ai=False)
-player_two = Player(ai=True)
+# player_one = Player(ai=False)
+# player_two = Player(ai=True)
 
-player_one_goes_first = bool(getrandbits(1))
-player_one_turn: bool = False
+# player_one_goes_first = bool(getrandbits(1))
+# player_one_turn: bool = False
 
-# Initialize and generate every possible turn with the above settings
-turn_tree = TurnTree(player_one=player_one,
-                     player_two=player_two,
-                     player_one_goes_first=player_one_goes_first)
+# # Initialize and generate every possible turn with the above settings
+# turn_tree = TurnTree(player_one=player_one,
+#                      player_two=player_two,
+#                      player_one_goes_first=player_one_goes_first)
 
-turn_tree.generateTree()
-turn_tree.evaluateTree()
+# turn_tree.generateTree()
+# turn_tree.evaluateTree()

@@ -1,5 +1,5 @@
 1. Fix the deduplication node loss - When a node is seen as duplicate only one pervious node link remains. 
-   Both previus nodes have to be listed. - DONE
+   All previus nodes have to be listed. - DONE
 
 2. Adjust the evaluation according to minmax - pick the min or max rating for multi rating nodes depending on which player goes on that trurn turn.
 

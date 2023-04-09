@@ -26,7 +26,7 @@ class Player:
 
 
     def input(self) -> str:
-        spell_choice: str = input("Which spell to cast? [fire/frost]").lower()
+        spell_choice: str = input("Which spell to cast? [fire/frost]").lower().strip()
         valid_input: bool = False
 
         while not valid_input:
@@ -40,6 +40,22 @@ class Player:
                     "Which spell to cast? [fire/frost]").lower()
 
         return spell_choice
+
+    def firstTurnInput(self) -> str:
+        first_turn_player: str = input("Which player will go first? [p1/p2]").lower().strip()
+        valid_input: bool = False
+
+        while not valid_input:
+            if first_turn_player == 'p1' or first_turn_player == 'p2':
+                valid_input = True
+                
+            else:
+                print(
+                    f'Answer needs to be p1 or p2, your answer was {first_turn_player}')
+                first_turn_player = input(
+                    "Which player will go first? [p1/p2]").lower().strip()
+
+        return first_turn_player
 
     def spellChoice(self, spell_choice: str, opponents_shield: int) -> dict:
         if spell_choice == 'fire':
