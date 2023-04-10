@@ -23,7 +23,6 @@ class Game:
         # Play out first turn
         # Set game to start on 1st turn (1st choice)
         self.turn = self.turn + 1
-        print(self.turn)
 
         options: list[dict] = self.turns[self.turn]
 
@@ -66,17 +65,14 @@ class Game:
             self.previous_id = option['id']
 
         print('____________________________________')
+        print(f"Player {options[0]['player']} attacks with {spell}")
         print(f'Human health = {self.human_health}, shields = {self.human_shields}\nAI health = {self.ai_health}, shields = {self.ai_shields}\nTurn {self.turn} concluded')
         print('____________________________________')
 
         self.turn = self.turn + 1
-        print(self.turn)
 
     def processTurn(self) -> None:
         # Play out regular turn
-        print(self.previous_id)
-        print(self.turns[self.turn])
-
         options: list[dict] = [option for option in self.turns[self.turn] if self.previous_id in option['previous_id']]
 
         # Process AI turn
@@ -117,6 +113,7 @@ class Game:
             self.ai_shields = option[self.ai_player]['shields']
             self.previous_id = option['id']
 
+        print(f"Player {options[0]['player']} attacks with {spell}")
         print(f'Human health = {self.human_health}, shields = {self.human_shields}\nAI health = {self.ai_health}, shields = {self.ai_shields}\nTurn {self.turn} concluded')
         print('____________________________________')
 

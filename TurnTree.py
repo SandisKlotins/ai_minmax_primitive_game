@@ -101,7 +101,6 @@ class TurnTree:
                     seen.append(node_vals)
 
                 else:
-
                     # If a node with those values already exists update possible paths to get to that node
                     node_idx = seen.index(node_vals)
                     turn_nodes[node_idx]['previous_id'].add(node['id'])

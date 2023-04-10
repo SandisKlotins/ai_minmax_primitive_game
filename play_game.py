@@ -1,7 +1,6 @@
 from Player import Player
 from Game import Game
 from TurnTree import TurnTree
-from random import getrandbits
 
 # Choose which player to play as
 human_player: str = input("Choose player: [p1/p2]").lower()
@@ -34,11 +33,9 @@ turn_tree.generateTree()
 turn_tree.evaluateTree()
 turns: dict = turn_tree.getTree()
 
-
 print(
     f'Initializing game\nPlayer one health = {player_one.getHealth()}, shields = {player_one.getShields()}\nPlayer two health = {player_two.getHealth()}, shields = {player_two.getShields()}')
 print(f'You are playing as {human_player}')
-print('____________________________________')
 
 # Initialize game with params
 game = Game(player=player_one, # doesnt matter which one, we just want the player class methods
@@ -52,7 +49,3 @@ game.processFirstTurn()
 while game.human_health > 0 and game.ai_health > 0:
     game.processTurn()
 
-if game.human_health > 0:
-    print('Human player has won!')
-else:
-    print('AI has won!')
