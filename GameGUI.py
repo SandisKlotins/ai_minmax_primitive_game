@@ -35,13 +35,17 @@ class GameGUI:
         self.player2_first_button = tk.Button(self.button_frame2, text="Player 2", command=lambda: self.select_first('p2'))
         self.player2_first_button.pack(side="left", padx=5)
 
-        self.spell_label = tk.Label(root, text="Choose element:", anchor="w")
+        self.spell_label = tk.Label(root, text="Choose spell:", anchor="w")
 
         self.spell_frame = tk.Frame(root)
         self.fire_button = tk.Button(self.spell_frame, text="Fire", command=lambda: self.select_spell("fire"))
         self.fire_button.pack(side="left", padx=5)
         self.frost_button = tk.Button(self.spell_frame, text="Frost", command=lambda: self.select_spell("frost"))
         self.frost_button.pack(side="left", padx=5)
+
+        self.retry_frame = tk.Frame(root)
+        self.retry_button = tk.Button(self.retry_frame, text="Play again", command=lambda: self.reset())
+        self.retry_button.pack(side="left", padx=5)
 
         self.progress_label_player_health = tk.Label(root, text="Placeholder", anchor="w")
         self.progress_bar_player_health = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
@@ -127,27 +131,31 @@ class GameGUI:
             player_one_goes_first=player_one_goes_first)
 
     def select_spell(self, spell: str) -> None:
-        if self.game.human_health > 0 and self.game.ai_health > 0:
-            if self.game.turn == 0:
-                self.game.processFirstTurn(spell) # Human turn
-                self.game.processTurn(spell) # AI turn
-                
-            else:
-                self.game.processTurn(spell) # Human turn
-                self.game.processTurn(spell) # AI turn
-
-            self.progress_label_player_health.config(text=f'Remaining {self.game.human_player} health: {self.game.human_health}')
-            self.progress_bar_player_health['value'] = self.game.human_health
-            self.progress_label_player_shields.config(text=f'Remaining {self.game.human_player} shields: {self.game.human_shields}')
-            self.progress_bar_player_shields['value'] = self.game.human_shields
-            self.progress_label_ai_health.config(text=f'Remaining {self.game.ai_player} health: {self.game.ai_health}')
-            self.progress_bar_ai_health['value'] = self.game.ai_health
-            self.progress_label_ai_shields.config(text=f'Remaining {self.game.ai_player} health: {self.game.ai_shields}')
-            self.progress_bar_ai_shields['value'] = self.game.ai_shields
-
+        if self.game.turn == 0:
+            self.game.processFirstTurn(spell) # Human turn
+            self.game.processTurn(spell) # AI turn
+            
         else:
+            self.game.processTurn(spell) # Human turn
+            self.game.processTurn(spell) # AI turn
+
+        self.progress_label_player_health.config(text=f'Remaining {self.game.human_player} health: {self.game.human_health}')
+        self.progress_bar_player_health['value'] = self.game.human_health
+        self.progress_label_player_shields.config(text=f'Remaining {self.game.human_player} shields: {self.game.human_shields}')
+        self.progress_bar_player_shields['value'] = self.game.human_shields
+        self.progress_label_ai_health.config(text=f'Remaining {self.game.ai_player} health: {self.game.ai_health}')
+        self.progress_bar_ai_health['value'] = self.game.ai_health
+        self.progress_label_ai_shields.config(text=f'Remaining {self.game.ai_player} health: {self.game.ai_shields}')
+        self.progress_bar_ai_shields['value'] = self.game.ai_shields
+
+        if self.game.human_health <= 0 or self.game.ai_health <= 0:
+            self.spell_frame.pack_forget()
+            
             winner: str = self.game.human_player if self.game.human_health > 0 else self.game.ai_player
+            self.spell_label.config(text=f'{winner} has won the game!\n Play again?')
+            self.retry_frame.pack()
             print(f'{winner} has won the game!')
+
         self.root.update()
 
     def show_progress_bar(self) -> None:
@@ -172,6 +180,18 @@ class GameGUI:
         self.progress_bar_ai_health.pack_forget()
         self.progress_label_ai_shields.pack_forget()
         self.progress_bar_ai_shields.pack_forget()
+
+    def reset(self) -> None:
+        self.chosen_player = None
+        self.chosen_first = None
+        self.hide_progress_bar()
+        self.is_ini: bool = False
+        self.retry_frame.pack_forget()
+        self.spell_label.pack_forget()
+
+        self.button_frame1.pack()
+        self.button_frame2.pack()
+        self.spell_label.config(text='Choose spell:')
 
 
 
