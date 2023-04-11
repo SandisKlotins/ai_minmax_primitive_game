@@ -19,14 +19,14 @@ Ai automatically is assigned the leftover player.
 - 4 progress bars appear, 2 for each player. One progress bar represents health, the other shields.
 - Player has to figure out which combination of spells takes the least amount of turns to get opponents health to 0.
 - Player and AI can cast a single spell on each turn (fire/frost). Each spell decrements opponents health and/or shields.
-- Fire deals 5 points of health and 5 points of shield damage if opponent has 1 or more shield points remaining. If opponent does not have any more shields the spell does 10 points of health damage
-- Frost deals 15 points of shield and 0 points of health damage if opponent has 1 or more shield points remaining. If opponent does not have any more shields the pell does 5 points of health damage.
+- Fire deals 5 points of health and 5 points of shield damage if opponent has 1 or more shield points remaining. If opponent does not have any shields the spell does 10 points of health damage
+- Frost deals 15 points of shield and 0 points of health damage if opponent has 1 or more shield points remaining. If opponent does not have shields the spell does 5 points of health damage.
 - Turns repeat until victory conditon is met
 - The user can choose to play again.
 
 # Technical implementation
 ## Game tree
-Code for game tree realization can be found in TurnTree.py and visualization of turns can be found in turn_example.py.
+Code for game tree realization can be found in TurnTree.py and visualization of turns can be found in turn_example.py.  
 
 Algorithm starts by generating a root node  
 Root node (and all the following nodes) are stored as dicts of list of dicts.
@@ -47,23 +47,27 @@ Game tree generation completes.
 
 ## Game tree evaluation
 Game tree is evaluated from bottom to top.  
-Evaluation starts by taking the last turn (last list) in from the game tree state dict.  
-Eavluation process is simple: ai player if human player has more or less and equal health to 0.  
+Evaluation starts by taking the last turn (last list) from the game tree turns dict.  
+Eavluation process is simple:  
 If human player has 0 or less health then rating = 1 else rating = -1 (there can be no neutral rating, one player has to die).  
 After evaluaing the root node the script evaluates the next node.  
-If next node contains id seen in root node's previous_id set then the current node inherits previous node's rating.  
+If next node contains id is seen in previous turn's nodes previous_id set then the current node inherits previous node's rating.  
 If id cannot be found in previous turn's previous_id set then the node is considered dead end node and a new rating is assigned (same way as last turn nodes were evaluated).  
 Once every turn's outcome has received a rating the evaluation flag is set to DONE.  
 ![Alt text](./media/ex2.PNG?raw=true "Evaluation example")
 
+MinMax was used because this simple game does not much complexity.  
+With point pool capped at 80 points all outcomes get processed on average in 26 turns. With no optimization this can be a rough amount to process, however, a deduplication procedure is used. Deduplication is achieved by storing each outcomes stats in a tuple and appending it to a list. If any of the following outcomes has the same values then it is not appended as a new option, instead that outcome's id gets added to exisitng outcome's previous_id set. This can be though of as a converging multiple outcomes into one outcome.
+![Alt text](./media/ex5.PNG?raw=true "Dedup example")
+
 ## Gameplay
 Game is played using the generated game tree.  
-Unlike evaluation each turn is processed from top to bottom.  
-Game is played by looping over the game tree one turn at a time.  
-Each time the user presses fire/frost button 2 turns in the game tree get processed - one turn from human input and the other for AI.  
+Unlike evaluation, each turn is processed from top to bottom.  
+Game is played by looping over the game tree two turns at a time.  
+Each time the user presses fire/frost button, two turns in the game tree get processed - one turn from human input and the other for AI.  
 In case of human input the corresponding spell is used to search the chosen outcome in th game tree*.  
 In case of AI all turn's outcomes are evaluated - best rating is picked (rating = 1)  
-In case both options have rating = 1 then AI additionally evaluates which of the two options products (sum points).  
-Preference is given to outcomes with smaller point product for opponent  
+In case both options have rating = 1 then AI additionally evaluates the two option's product (sum points).  
+Preference is given to outcomes with smaller point product for opponent.  
 ![Alt text](./media/ex3.PNG?raw=true "Gameplay example")
 ![Alt text](./media/ex4.PNG?raw=true "Gameplay example GUI")
