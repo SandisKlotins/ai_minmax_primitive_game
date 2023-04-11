@@ -21,26 +21,26 @@ class GameGUI:
         self.choose_player_label.pack()
 
         self.button_frame1 = tk.Frame(root)
-        self.player1_button = tk.Button(self.button_frame1, text="Player 1", command=lambda: self.select_player('p1'))
+        self.player1_button = tk.Button(self.button_frame1, text="Player 1", command=lambda: self.selectPlayer('p1'))
         self.player1_button.pack(side="left", padx=5)
-        self.player2_button = tk.Button(self.button_frame1, text="Player 2", command=lambda: self.select_player('p2'))
+        self.player2_button = tk.Button(self.button_frame1, text="Player 2", command=lambda: self.selectPlayer('p2'))
         self.player2_button.pack(side="left", padx=5)
         self.button_frame1.pack(pady=10)
 
         self.choose_first_label = tk.Label(root, text="Choose who goes first:", anchor="w")
 
         self.button_frame2 = tk.Frame(root)
-        self.player1_first_button = tk.Button(self.button_frame2, text="Player 1", command=lambda: self.select_first('p1'))
+        self.player1_first_button = tk.Button(self.button_frame2, text="Player 1", command=lambda: self.selectFirst('p1'))
         self.player1_first_button.pack(side="left", padx=5)
-        self.player2_first_button = tk.Button(self.button_frame2, text="Player 2", command=lambda: self.select_first('p2'))
+        self.player2_first_button = tk.Button(self.button_frame2, text="Player 2", command=lambda: self.selectFirst('p2'))
         self.player2_first_button.pack(side="left", padx=5)
 
         self.spell_label = tk.Label(root, text="Choose spell:", anchor="w")
 
         self.spell_frame = tk.Frame(root)
-        self.fire_button = tk.Button(self.spell_frame, text="Fire", command=lambda: self.select_spell("fire"))
+        self.fire_button = tk.Button(self.spell_frame, text="Fire", command=lambda: self.selectSpell("fire"))
         self.fire_button.pack(side="left", padx=5)
-        self.frost_button = tk.Button(self.spell_frame, text="Frost", command=lambda: self.select_spell("frost"))
+        self.frost_button = tk.Button(self.spell_frame, text="Frost", command=lambda: self.selectSpell("frost"))
         self.frost_button.pack(side="left", padx=5)
 
         self.retry_frame = tk.Frame(root)
@@ -63,11 +63,11 @@ class GameGUI:
         self.progress_bar_ai_shields = ttk.Progressbar(root, orient="horizontal", length=300, mode="determinate")
         #self.progress_bar_ai_shields['value'] = self.default_progress
 
-        self.hide_progress_bar()
+        self.hideProgressBar()
 
         self.is_ini: bool = False
 
-    def select_player(self, player) -> None:
+    def selectPlayer(self, player) -> None:
         self.chosen_player = player
         self.button_frame1.pack_forget()
         self.choose_first_label.pack()
@@ -76,10 +76,10 @@ class GameGUI:
         self.choose_player_label.config(text=f'Choose Player: {self.chosen_player}')
         self.choose_first_label.pack()
 
-    def select_first(self, first) -> None:
+    def selectFirst(self, first) -> None:
         self.chosen_first = first
         self.button_frame2.pack_forget()
-        self.show_progress_bar()
+        self.showProgressBar()
 
         self.choose_first_label.config(text=f'Choose who goes first: {self.chosen_first}')
 
@@ -130,7 +130,7 @@ class GameGUI:
             turns=self.turns,
             player_one_goes_first=player_one_goes_first)
 
-    def select_spell(self, spell: str) -> None:
+    def selectSpell(self, spell: str) -> None:
         if self.game.turn == 0:
             self.game.processFirstTurn(spell) # Human turn
             self.game.processTurn(spell) # AI turn
@@ -158,7 +158,7 @@ class GameGUI:
 
         self.root.update()
 
-    def show_progress_bar(self) -> None:
+    def showProgressBar(self) -> None:
         self.progress_label_player_health.pack()
         self.progress_bar_player_health.pack()
         self.progress_label_player_shields.pack()
@@ -170,7 +170,7 @@ class GameGUI:
         self.progress_bar_ai_shields.pack()
 
 
-    def hide_progress_bar(self) -> None:
+    def hideProgressBar(self) -> None:
         self.progress_label_player_health.pack_forget()
         self.progress_bar_player_health.pack_forget()
         self.progress_label_player_shields.pack_forget()
@@ -184,7 +184,7 @@ class GameGUI:
     def reset(self) -> None:
         self.chosen_player = None
         self.chosen_first = None
-        self.hide_progress_bar()
+        self.hideProgressBar()
         self.is_ini: bool = False
         self.retry_frame.pack_forget()
         self.spell_label.pack_forget()
@@ -192,10 +192,3 @@ class GameGUI:
         self.button_frame1.pack()
         self.button_frame2.pack()
         self.spell_label.config(text='Choose spell:')
-
-
-
-if __name__ == '__main__':
-    root = tk.Tk()
-    game = GameGUI(root)
-    root.mainloop()
