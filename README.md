@@ -48,7 +48,7 @@ Game tree generation completes.
 ## Optimizations
 With point pool capped at 80 all outcomes get processed on average in 26 turns. With no optimization this can be a rough amount to process 
 e.g. turn 25 would have 2^25 = 33554432 outcomes, however, a deduplication procedure is used.  
-Deduplication is achieved by storing each outcome's stats in a tuple and appending it to a list of seen outcomes. If any of the following outcomes has the same values then it is not appended as a new option, instead that outcome's id gets added to exisitng outcome's previous_id set. This can be though of as a converging multiple outcomes into one outcome.
+Deduplication is achieved by storing each outcome's stats in a tuple and appending it to a list of seen outcomes. If any of the following outcomes has the same values then it is not appended as a new option, instead that outcome's id gets added to exisitng outcome's previous_id set. This can be though of as converging multiple outcomes into one outcome.
 As a result we get couple of hundered options instead of millions.
 ![Alt text](./media/ex5.PNG?raw=true "Dedup example")
 
