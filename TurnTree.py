@@ -140,7 +140,7 @@ class TurnTree:
         self.state[self.turn] = turn_nodes
         self.turn = self.turn + 1
 
-    def generateTree(self):
+    def generateTree(self) -> None:
         self.__generateRootNode()
         while not len(self.state[self.turn - 1]) == 0:
             self.__generateNextTurn()
@@ -190,17 +190,3 @@ class TurnTree:
             self.turn = self.turn - 1
         self.__is_evaluated = True
 
-
-# player_one = Player(ai=False)
-# player_two = Player(ai=True)
-
-# player_one_goes_first = bool(getrandbits(1))
-# player_one_turn: bool = False
-
-# # Initialize and generate every possible turn with the above settings
-# turn_tree = TurnTree(player_one=player_one,
-#                      player_two=player_two,
-#                      player_one_goes_first=player_one_goes_first)
-
-# turn_tree.generateTree()
-# turn_tree.evaluateTree()
