@@ -3,8 +3,7 @@
 ## Getting started
 Tested on python 3.9, 3.10, and 3.11.
 Dependencies: built in tkinter library.
-
-run the start.py file
+Run the start.py file
 
 ## Rules
 Two player game.
@@ -43,3 +42,28 @@ Root node (and all the following nodes) are stored as dicts of list of dicts.
     - **rating** = rating if outcome is good for AI (1 =  good outcome, -1 = bad outcome, None = tree not evaluated yet)
 
 ![Alt text](./media/ex1.PNG?raw=true "Outcome example")
+New turns and nodes are iteratively generated until player 1 and player 2 have 0 or less health in every outcome.
+Game tree generation completes.
+
+## Game tree evaluation
+Game tree is evaluated from bottom to top.
+Evaluation starts by taking the last turn (last list) in from the game tree state dict.
+Eavluation process is simple: ai player if human player has more or less and equal health to 0.
+If human player has 0 or less health then rating = 1 else rating = -1 (there can be no neutral rating, one player has to die).
+After evaluaing the root node the script evaluates the next node.
+If next node contains id seen in root node's previous_id set then the current node inherits previous node's rating.
+If id cannot be found in previous turn's previous_id set then the node is considered dead end node and a new rating is assigned (same way as last turn nodes were evaluated).
+Once every turn's outcome has received a rating the evaluation flag is set to DONE.
+![Alt text](./media/ex2.PNG?raw=true "Evaluation example")
+
+## Gameplay
+Game is played using the generated game tree.
+Unlike evaluation each turn is processed from top to bottom
+Game is played by looping over the game tree one turn at a time.
+Each time the user presses fire/frost button 2 turns in the game tree get processed - one turn from human input and the other for AI.
+In case of human input the corresponding spell is used to search the chosen outcome in th game tree*.
+In case of AI all turn's outcomes are evaluated - best rating is picked (rating = 1)
+In case both options have rating = 1 then AI additionally evaluates which of the two options products (sum points).
+Preference is given to outcomes with smaller point product for opponent
+![Alt text](./media/ex3.PNG?raw=true "Gameplay example")
+![Alt text](./media/ex4.PNG?raw=true "Gameplay example GUI")
