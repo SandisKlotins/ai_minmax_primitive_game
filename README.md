@@ -39,7 +39,7 @@ Root node (and all the following nodes) are stored as dicts of list of dicts.
     - **p1** = dict storing player 1's health and shield values
     - **p2** = dict storing player 2's health and shield values
     - **player** = identifies which player is making the turn (Player 1/Player 2)
-    - **player** = identifies which spell leads to outcome
+    - **spell** = identifies which spell leads to outcome
     - **rating** = rating if outcome is good for AI (1 =  good outcome, -1 = bad outcome, None = tree not evaluated yet)
 
-![Alt text](relative%20media/ex1.PNG?raw=true "Title")
+![Alt text](./media/ex1.PNG?raw=true "Outcome example")
