@@ -45,6 +45,13 @@ Root node (and all the following nodes) are stored as dicts of list of dicts.
 New turns and nodes are iteratively generated until player 1 and player 2 have 0 or less health in every outcome.  
 Game tree generation completes.  
 
+## Optimizations
+With point pool capped at 80 all outcomes get processed on average in 26 turns. With no optimization this can be a rough amount to process  
+e.g. turn 25 would have 2^25 = 33554432 outcomes, however, a deduplication procedure is used.  
+Deduplication is achieved by storing each outcome's stats in a tuple and appending it to a list of seen outcomes. If any of the following outcomes has the same values then it is not appended as a new option, instead that outcome's id gets added to exisitng outcome's previous_id set. This can be though of as a converging multiple outcomes into one outcome.
+As a result we get couple of hundered options instead of millions.
+![Alt text](./media/ex5.PNG?raw=true "Dedup example")
+
 ## Game tree evaluation
 Game tree is evaluated from bottom to top.  
 Evaluation starts by taking the last turn (last list) from the game tree turns dict.  
@@ -56,12 +63,13 @@ If id cannot be found in previous turn's previous_id set then the node is consid
 Once every turn's outcome has received a rating the evaluation flag is set to DONE.  
 ![Alt text](./media/ex2.PNG?raw=true "Evaluation example")
 
-MinMax was used because this simple game does not much complexity.  
-With point pool capped at 80 all outcomes get processed on average in 26 turns. With no optimization this can be a rough amount to process  
-e.g. turn 25 would have 2^25 = 33554432 outcomes, however, a deduplication procedure is used.  
-Deduplication is achieved by storing each outcome's stats in a tuple and appending it to a list of seen outcomes. If any of the following outcomes has the same values then it is not appended as a new option, instead that outcome's id gets added to exisitng outcome's previous_id set. This can be though of as a converging multiple outcomes into one outcome.
-As a result we get couple of hundered options instead of millions.
-![Alt text](./media/ex5.PNG?raw=true "Dedup example")
+## Choice to use MinMax 
+The thought up game is faily light and fully evaluating each outcome does not take a lot of resources - a good choice for MinMax.
+Alpha Beta would also be a good choice here but author did not choose it because of added complexity compared to MinMax.
+Before committing to this game author considered making an algorithm for checkers and analyze each in depth of 2 proceeding turns.
+However, complexity quickly became overwhelming for the time author had for this project both in terms of storing and updating game state and
+creating the GUI for a game like this.
+In fact even for this primitive game author made some mistakes with game state storage and processing which were not noticed unill testing and lead to sometimes confusing code and loss of time patching them out.
 
 ## Gameplay
 Game is played using the generated game tree.  
