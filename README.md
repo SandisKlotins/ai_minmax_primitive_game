@@ -57,7 +57,7 @@ Game tree is evaluated from bottom to top.
 Evaluation starts by taking the last turn (last list) from the game tree turns dict.  
 Eavluation process is simple:  
 If human player has 0 or less health then rating = 1 else rating = -1 (there can be no neutral rating, one player has to die).  
-After evaluaing the root node the script evaluates the next node.  
+After evaluaing all nodes on the final level the script moves up by one level and evaluates the next set of node.  
 If next node contains id is seen in previous turn's nodes previous_id set then the current node inherits previous node's rating.  
 If id cannot be found in previous turn's previous_id set then the node is considered dead end node and a new rating is assigned (same way as last turn nodes were evaluated).  
 Once every turn's outcome has received a rating the evaluation flag is set to DONE.  
